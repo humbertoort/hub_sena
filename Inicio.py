@@ -59,10 +59,10 @@ st.write('Ejecutar Proceso: ',codrfid)
 if (codrfid=="0405829753"): # verde
    image = Image.open('camisetaverde.jpg')
    st.image(image, caption=' Proceso Equipo2')
-   client1.publish("accion","on")  
+   client1.publish("accion/hub","on")  
 
 
 if (codrfid=="0407926893"): # Negro
    image = Image.open('camisetanegra.jpg')
    st.image(image, caption='Proceso Equipo2')
-   client1.publish("accion","off") 
+   client1.publish("accion/hub","off") 
