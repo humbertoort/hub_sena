@@ -31,12 +31,12 @@ client1.subscribe("remote")
 client1.on_message = on_message
 client1.connect(broker,port)
 
-image0 = Image.open('logo.jpeg')
+image0 = Image.open('senalogo.png')
 st.image(image0, caption='SENA')
 
 st.subheader('Operación Robot sobre Internet')
 
-image2 = Image.open('dobot.jpg')
+image2 = Image.open('descarga_magician.jpg')
 st.image(image2, caption='Robot')
 
 st.markdown("Código RFID")
@@ -57,12 +57,12 @@ st.write('Ejecutar Proceso: ',codrfid)
 
 
 if (codrfid=="0405829753"): # verde
-   image = Image.open('img1.jpg')
+   image = Image.open('camisetaverde.jpg')
    st.image(image, caption=' Proceso Equipo2')
    client1.publish("accion","on")  
 
 
 if (codrfid=="0407926893"): # Negro
-   image = Image.open('bordados.jpg')
+   image = Image.open('camisetanegra.jpg')
    st.image(image, caption='Proceso Equipo2')
    client1.publish("accion","off") 
