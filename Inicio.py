@@ -10,7 +10,7 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings("ignore")
 
-broker="157.230.214.127"
+broker="broker.mqttdashboard.com"
 port=1883
 
 
