@@ -1,0 +1,81 @@
+"""
+Sistema de Control de Robot sobre Internet
+
+Este script permite la operación remota de un robot utilizando un cliente MQTT para la comunicación. 
+El sistema emplea Streamlit como interfaz gráfica para recibir códigos RFID y ejecutar acciones específicas.
+
+Autor: [Tu Nombre]
+Fecha: [Fecha de creación]
+Versión: 1.0
+"""
+
+# Importación de librerías necesarias
+import streamlit as st  # Librería para la creación de la interfaz web
+from PIL import Image  # Manejo de imágenes
+import time  # Manejo de tiempos y retardos
+import paho.mqtt.client as paho  # Cliente MQTT para la comunicación
+import warnings  # Para suprimir advertencias
+warnings.filterwarnings("ignore")  # Ignorar advertencias innecesarias
+
+# Configuración del broker MQTT
+broker = "broker.mqttdashboard.com"  # Dirección del broker MQTT
+port = 1883  # Puerto de conexión
+
+# Función de callback al publicar un mensaje
+def on_publish(client, userdata, result):
+    """
+    Función ejecutada al publicar un mensaje en un tópico MQTT.
+    """
+    print("El dato ha sido publicado\n")
+    pass
+
+# Función de callback al recibir un mensaje
+def on_message(client, userdata, message):
+    """
+    Función ejecutada cuando se recibe un mensaje en un tópico suscrito.
+    """
+    global message_received
+    time.sleep(2)
+    message_received = str(message.payload.decode("utf-8"))
+    print(message_received)
+
+# Configuración del cliente MQTT
+client1 = paho.Client("Python")  # Creación del cliente
+client1.on_publish = on_publish  # Asignación de función de publicación
+client1.subscribe("remote")  # Suscripción a un tópico
+client1.on_message = on_message  # Asignación de función para recibir mensajes
+client1.connect(broker, port)  # Conexión al broker MQTT
+
+# Carga y visualización del logo de SENA
+image0 = Image.open('senalogo.png')
+st.image(image0, caption='SENA')
+
+# Título de la aplicación
+st.subheader('Operación Robot sobre Internet')
+
+# Carga y visualización de la imagen del robot
+image2 = Image.open('descarga_magician.jpg')
+st.image(image2, caption='Robot')
+
+# Sección de entrada del código RFID
+st.markdown("Código RFID")
+
+# Entrada de texto para el código RFID con opción de limpiar
+placeholder = st.empty()
+codrfid = placeholder.text_input('Ingrese el código RFID', max_chars=10, key=1)
+click_clear = st.button('Limpiar', key=3)
+if click_clear:
+    codrfid = placeholder.text_input('Ingrese el código RFID', value='', key=2)
+
+st.write('Ejecutar Proceso: ', codrfid)
+
+# Procesamiento según el código RFID ingresado
+if codrfid == "0405829753":  # Código RFID asociado al equipo 2 (Verde)
+    image = Image.open('camisetaverde.jpg')
+    st.image(image, caption='Proceso Equipo2')
+    client1.publish("accion/hub", "on")  # Enviar comando MQTT para activar acción
+
+elif codrfid == "0407926893":  # Código RFID asociado al equipo 2 (Negro)
+    image = Image.open('camisetanegra.jpg')
+    st.image(image, caption='Proceso Equipo2')
+    client1.publish("accion/hub", "off")  # Enviar comando MQTT para desactivar acción
